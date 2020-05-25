@@ -1,0 +1,1 @@
+# entos-iot-api-spec
