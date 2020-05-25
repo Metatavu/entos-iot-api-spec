@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Entos-IoT API
+security:
+  - bearerAuth: []
+paths:
+
+  /system/ping:
+    get:
+      summary: System ping endpoint
+      operationId: ping
+      tags:
+        - system
+      responses:
+        '200':
+          description: System ping response
+          content:
+            text/plain:
+              schema:
+                description: Returns PING
