@@ -5,7 +5,6 @@ info:
 security:
   - bearerAuth: []
 paths:
-
   /system/ping:
     get:
       summary: System ping endpoint
@@ -19,3 +18,30 @@ paths:
             text/plain:
               schema:
                 description: Returns PING
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
