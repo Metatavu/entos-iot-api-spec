@@ -874,7 +874,7 @@ components:
         mac:
           type: string
         firmware:
-          type: number
+          type: integer
           format: int32
   
     CustomerDevice:
@@ -951,7 +951,7 @@ components:
             type: number
             format: double
         interval:
-          type: number
+          type: integer
           format: int64
   
     Error:
