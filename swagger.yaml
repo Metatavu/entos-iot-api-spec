@@ -208,7 +208,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /locations/{locationId}/devices:
+  /devices:
     get:
       summary: List devices
       operationId: listDevices
@@ -216,8 +216,7 @@ paths:
         - Device
       parameters:
         - name: locationId
-          required: true
-          in: path
+          in: query
           description: location id
           schema:
             type: string
@@ -244,14 +243,6 @@ paths:
       operationId: createDevice
       tags:
         - Device
-      parameters:
-        - name: locationId
-          required: true
-          in: path
-          description: location id
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -274,20 +265,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /locations/{locationId}//devices/{deviceId}:
+  /devices/{deviceId}:
     get:
       summary: Find device
       operationId: findDevice
       tags:
         - Device
       parameters:
-        - name: locationId
-          required: true
-          in: path
-          description: location id
-          schema:
-            type: string
-            format: uuid
         - name: deviceId
           in: path
           required: true
@@ -315,13 +299,6 @@ paths:
       tags:
         - Device
       parameters:
-        - name: locationId
-          required: true
-          in: path
-          description: location id
-          schema:
-            type: string
-            format: uuid
         - name: deviceId
           in: path
           required: true
@@ -356,13 +333,6 @@ paths:
       tags:
         - Device
       parameters:
-        - name: locationId
-          required: true
-          in: path
-          description: location id
-          schema:
-            type: string
-            format: uuid
         - name: deviceId
           in: path
           required: true
@@ -909,6 +879,7 @@ components:
         locationId:
           type: string
           format: uuid
+          readOnly: true
         serialnumber:
           type: string
         mac:
