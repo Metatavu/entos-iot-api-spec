@@ -5,6 +5,7 @@ info:
 security:
   - bearerAuth: []
 paths:
+
   /system/ping:
     get:
       summary: System ping endpoint
@@ -25,14 +26,974 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /measurements:
+    get:
+      summary: List measurements
+      operationId: listMeasurements
+      tags:
+        - Measurement
+      parameters:
+        - name: deviceId
+          in: query
+          description: list measurement by specific device
+          schema:
+            type: string
+            format: uuid
+        - name: after
+          in: query
+          description: list measurements after
+          schema:
+            type: string
+            format: date-time
+        - name: before
+          in: query
+          description: list measurements before
+          schema:
+            type: string
+            format: date-time
+        - name: sensor
+          in: query
+          description: list measurements by specific sensor
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Measurement list response
+          content:
+            application/json:
+              schema:
+                description: list of measurements
+                type: array
+                items:
+                  $ref: '#/components/schemas/MeasurementValues'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations:
+    get:
+      summary: List locations
+      operationId: listLocations
+      tags:
+        - Location
+      responses:
+        '200':
+          description: Location list response
+          content:
+            application/json:
+              schema:
+                description: list of locations
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create location
+      operationId: createLocation
+      tags:
+        - Location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Location create response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations/{locationId}:
+    get:
+      summary: Find location
+      operationId: findLocation
+      tags:
+        - Location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          description: Location to find
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Location find response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update location
+      operationId: updateLocation
+      tags:
+        - Location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          description: Location to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Location update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete location
+      operationId: deleteLocation
+      tags:
+        - Location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          description: Location to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Empty response indicating successful removal
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations/{locationId}/devices:
+    get:
+      summary: List devices
+      operationId: listDevices
+      tags:
+        - Device
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device list response
+          content:
+            application/json:
+              schema:
+                description: list of devices
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create device
+      operationId: createDevice
+      tags:
+        - Device
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Device create response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations/{locationId}//devices/{deviceId}:
+    get:
+      summary: Find device
+      operationId: findDevice
+      tags:
+        - Device
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceId
+          in: path
+          required: true
+          description: Device to find
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device find response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update device
+      operationId: updateDevice
+      tags:
+        - Device
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceId
+          in: path
+          required: true
+          description: Device to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Device update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete device
+      operationId: deleteDevice
+      tags:
+        - Device
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceId
+          in: path
+          required: true
+          description: Device to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Empty response indicating successful removal
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /customerdevices:
+    get:
+      summary: List customerdevices
+      operationId: listCustomerDevices
+      tags:
+        - CustomerDevice
+      responses:
+        '200':
+          description: CustomerDevice list response
+          content:
+            application/json:
+              schema:
+                description: list of customerdevices
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerDevice'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create customerdevice
+      operationId: createCustomerDevice
+      tags:
+        - CustomerDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDevice'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: CustomerDevice create response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDevice'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /customerdevices/{customerdeviceId}:
+    get:
+      summary: Find customerdevice
+      operationId: findCustomerDevice
+      tags:
+        - CustomerDevice
+      parameters:
+        - name: customerdeviceId
+          in: path
+          required: true
+          description: CustomerDevice to find
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: CustomerDevice find response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDevice'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update customerdevice
+      operationId: updateCustomerDevice
+      tags:
+        - CustomerDevice
+      parameters:
+        - name: customerdeviceId
+          in: path
+          required: true
+          description: CustomerDevice to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDevice'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: CustomerDevice update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDevice'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete customerdevice
+      operationId: deleteCustomerDevice
+      tags:
+        - CustomerDevice
+      parameters:
+        - name: customerdeviceId
+          in: path
+          required: true
+          description: CustomerDevice to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Empty response indicating successful removal
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations/{locationId}/settings:
+    get:
+      summary: List settings
+      operationId: listSettings
+      tags:
+        - Settings
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Setting list response
+          content:
+            application/json:
+              schema:
+                description: list of settings
+                type: array
+                items:
+                  $ref: '#/components/schemas/Settings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create settings
+      operationId: createSettings
+      tags:
+        - Settings
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Settings create response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /locations/{locationId}/settings/{settingsId}:
+    get:
+      summary: Find settings
+      operationId: findSettings
+      tags:
+        - Settings
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: settingsId
+          in: path
+          required: true
+          description: Settings to find
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Settings find response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update settings
+      operationId: updateSettings
+      tags:
+        - Settings
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: settingsId
+          in: path
+          required: true
+          description: Settings to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Settings update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete settings
+      operationId: deleteSettings
+      tags:
+        - Settings
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          description: location id
+          schema:
+            type: string
+            format: uuid
+        - name: settingsId
+          in: path
+          required: true
+          description: Settings to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Empty response indicating successful removal
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /alertSettings:
+    get:
+      summary: List alert settings
+      operationId: listAlertSettings
+      tags:
+        - AlertSettings
+      responses:
+        '200':
+          description: Alert settings list response
+          content:
+            application/json:
+              schema:
+                description: list of settings
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertSettings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create alert settings
+      operationId: createAlertSettings
+      tags:
+        - AlertSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertSettings'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Alert settings create response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertSettings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /alertSettings/{alertSettingsId}:
+    get:
+      summary: Find alert settings
+      operationId: findAlertSettings
+      tags:
+        - AlertSettings
+      parameters:
+        - name: alertSettingsId
+          in: path
+          required: true
+          description: Alert settings to find
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Alert settings find response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertSettings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update alert settings
+      operationId: updateAlertSettings
+      tags:
+        - AlertSettings
+      parameters:
+        - name: alertSettingsId
+          in: path
+          required: true
+          description: Alert settings to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertSettings'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Alert settings update response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertSettings'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete alert settings
+      operationId: deleteAlertSettings
+      tags:
+        - AlertSettings
+      parameters:
+        - name: alertSettingsId
+          in: path
+          required: true
+          description: Alert settings to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Empty response indicating successful removal
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   schemas:
+    Location:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        address:
+          type: string
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        creatorId:
+          type: string
+          format: uuid
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
+
+    Coordinates:
+      type: object
+      description: Coordinate object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+    MeasurementValues:
+      type: object
+      description: Current measurement values
+      required:
+        - key
+        - value
+        - timestamp
+        - deviceId
+      properties:
+        sensor:
+          type: string
+        value:
+          type: number
+          format: double
+        timestamp:
+          type: string
+          format: date-time
+        deviceId:
+          type: string
+          format: uuid
+
+    Device:
+      type: object
+      description: Device
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        locationId:
+          type: string
+          format: uuid
+          readOnly: true
+        serialnumber:
+          type: string
+        mac:
+          type: string
+        firmware:
+          type: integer
+          format: int32
+
+    CustomerDevice:
+      type: object
+      description: Device for customer
+      required:
+        - userId
+        - deviceId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        userId:
+          type: string
+          format: uuid
+        deviceId:
+          type: string
+          format: uuid
+
+    Settings:
+      type: object
+      description: Settings for temperature adjustments
+      required:
+        - readingLow
+        - readingHigh
+        - modifierLow
+        - modifierHigh
+        - name
+        - unit
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        locationId:
+          type: string
+          format: uuid
+          readOnly: true
+        readingLow:
+          type: number
+          format: double
+        readingHigh:
+          type: number
+          format: double
+        modifierLow:
+          type: number
+          format: double
+        modifierHigh:
+          type: number
+          format: double
+        name:
+          type: string
+        unit:
+          type: string
+
+    AlertSettings:
+      type: object
+      description: Alert settings
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceId:
+          type: string
+          format: uuid
+          readOnly: true
+        sensor:
+          type: string
+        limits:
+          type: array
+          items:
+            type: number
+            format: double
+        interval:
+          type: integer
+          format: int64
 
     Error:
       type: object
