@@ -515,12 +515,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /locations/{locationId}/settings:
+  /locations/{locationId}/calculationSettings:
     get:
-      summary: List settings
-      operationId: listSettings
+      summary: List calculation settings
+      operationId: listCalculationSettings
       tags:
-        - Settings
+        - CalculationSettings
       parameters:
         - name: locationId
           required: true
@@ -531,14 +531,14 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Setting list response
+          description: Calculation setting list response
           content:
             application/json:
               schema:
                 description: list of settings
                 type: array
                 items:
-                  $ref: '#/components/schemas/Settings'
+                  $ref: '#/components/schemas/CalculationSetting'
 
         default:
           description: unexpected error
@@ -547,10 +547,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
-      summary: Create settings
-      operationId: createSettings
+      summary: Create calculation setting
+      operationId: createCalculationSetting
       tags:
-        - Settings
+        - CalculationSettings
       parameters:
         - name: locationId
           required: true
@@ -563,16 +563,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Settings'
+              $ref: '#/components/schemas/CalculationSetting'
         description: Payload
         required: true
       responses:
         '200':
-          description: Settings create response
+          description: Calculation setting create response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Settings'
+                $ref: '#/components/schemas/CalculationSetting'
 
         default:
           description: unexpected error
@@ -581,12 +581,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /locations/{locationId}/settings/{settingsId}:
+  /locations/{locationId}/calculationSettings/{calculationSettingId}:
     get:
-      summary: Find settings
-      operationId: findSettings
+      summary: Find calculation setting
+      operationId: findCalculationSetting
       tags:
-        - Settings
+        - CalculationSettings
       parameters:
         - name: locationId
           required: true
@@ -595,20 +595,20 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: settingsId
+        - name: calculationSettingId
           in: path
           required: true
-          description: Settings to find
+          description: Calculation setting to find
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: Settings find response
+          description: Calculation setting find response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Settings'
+                $ref: '#/components/schemas/CalculationSetting'
 
         default:
           description: unexpected error
@@ -617,10 +617,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Update settings
-      operationId: updateSettings
+      summary: Update calculation setting
+      operationId: updateCalculationSetting
       tags:
-        - Settings
+        - CalculationSettings
       parameters:
         - name: locationId
           required: true
@@ -629,10 +629,10 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: settingsId
+        - name: calculationSettingId
           in: path
           required: true
-          description: Settings to update
+          description: Calculation setting to update
           schema:
             type: string
             format: uuid
@@ -640,16 +640,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Settings'
+              $ref: '#/components/schemas/CalculationSetting'
         description: Payload
         required: true
       responses:
         '200':
-          description: Settings update response
+          description: Calculation setting update response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Settings'
+                $ref: '#/components/schemas/CalculationSetting'
 
         default:
           description: unexpected error
@@ -658,10 +658,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
-      summary: Delete settings
-      operationId: deleteSettings
+      summary: Delete calculation setting
+      operationId: deleteCalculationSetting
       tags:
-        - Settings
+        - CalculationSettings
       parameters:
         - name: locationId
           required: true
@@ -670,10 +670,10 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: settingsId
+        - name: calculationSettingId
           in: path
           required: true
-          description: Settings to delete
+          description: Calculation setting to delete
           schema:
             type: string
             format: uuid
@@ -936,14 +936,12 @@ components:
           type: string
           format: uuid
 
-    Settings:
+    CalculationSetting:
       type: object
       description: Settings for temperature adjustments
       required:
-        - readingLow
-        - readingHigh
-        - modifierLow
-        - modifierHigh
+        - reading
+        - modifier
         - name
         - unit
       properties:
@@ -955,22 +953,60 @@ components:
           type: string
           format: uuid
           readOnly: true
+        name:
+          type: string
+        unit:
+          type: string
+        reading:
+          $ref: '#/components/schemas/Reading'
+        modifier:
+          $ref: '#/components/schemas/Modifier'
+        creatorId:
+          type: string
+          format: uuid
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
+
+    Reading:
+      type: object
+      description: Measurement reading object
+      required:
+        - readingLow
+        - readingHigh
+      properties:
         readingLow:
           type: number
           format: double
         readingHigh:
           type: number
           format: double
+
+    Modifier:
+      type: object
+      description: Measurement modifier object
+      required:
+        - modifierLow
+        - modifierHigh
+      properties:
         modifierLow:
           type: number
           format: double
         modifierHigh:
           type: number
           format: double
-        name:
-          type: string
-        unit:
-          type: string
 
     AlertSettings:
       type: object
