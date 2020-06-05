@@ -909,7 +909,6 @@ components:
         locationId:
           type: string
           format: uuid
-          readOnly: true
         serialnumber:
           type: string
         mac:
