@@ -871,6 +871,8 @@ components:
     Device:
       type: object
       description: Device
+      required:
+        - name
       properties:
         id:
           type: string
@@ -879,14 +881,33 @@ components:
         locationId:
           type: string
           format: uuid
-          readOnly: true
-        serialnumber:
+        name:
+          type: string
+        serialNumber:
           type: string
         mac:
           type: string
         firmware:
           type: integer
           format: int32
+        creatorId:
+          type: string
+          format: uuid
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
 
     CustomerDevice:
       type: object
