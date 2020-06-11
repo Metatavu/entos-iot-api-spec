@@ -44,13 +44,11 @@ paths:
           description: list measurements after
           schema:
             type: string
-            format: date-time
         - name: before
           in: query
           description: list measurements before
           schema:
             type: string
-            format: date-time
         - name: sensor
           in: query
           description: list measurements by specific sensor
