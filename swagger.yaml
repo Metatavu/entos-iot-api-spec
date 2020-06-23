@@ -54,6 +54,11 @@ paths:
           description: list measurements by specific sensor
           schema:
             type: string
+        - name: onlyAlerts
+          in: query
+          description: show only alert-level measurements
+          schema:
+            type: boolean
       responses:
         '200':
           description: Measurement list response
