@@ -57,6 +57,7 @@ paths:
         - name: onlyAlerts
           in: query
           description: show only alert-level measurements
+          required: true
           schema:
             type: boolean
       responses:
