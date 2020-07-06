@@ -1091,14 +1091,15 @@ components:
     Log:
       type: object
       required:
-        - message
-        - timestamp
-        - user
+        - messageKey
+        - timeStamp
+        - userEmail
       properties:
-        message:
+        messageKey:
           type: string
-        timestamp:
+        timeStamp:
           type: string
-        user:
+          format: date-time
+        userEmail:
           type: string
         
