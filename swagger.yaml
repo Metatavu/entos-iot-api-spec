@@ -6,6 +6,56 @@ security:
   - bearerAuth: []
 paths:
 
+  /logs:
+    get:
+      summary: Get logs
+      operationId: listLogs
+      tags:
+        - Log
+      responses:
+        '200':
+          description: Logs
+          content:
+            application/json:
+              schema:
+                description: Logs
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create logs
+      tags:
+        - Log
+      operationId: createLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Log'
+        description: Payload
+        required: true
+      responses:
+        '200':
+          description: Created log
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  
+      
+
   /system/ping:
     get:
       summary: System ping endpoint
@@ -1037,3 +1087,19 @@ components:
           format: int32
         message:
           type: string
+    
+    Log:
+      type: object
+      required:
+        - messageKey
+        - timeStamp
+        - userEmail
+      properties:
+        messageKey:
+          type: string
+        timeStamp:
+          type: string
+          format: date-time
+        userEmail:
+          type: string
+        
