@@ -53,8 +53,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'  
-      
+                $ref: '#/components/schemas/Error'
+
 
   /system/ping:
     get:
@@ -717,6 +717,18 @@ paths:
       operationId: listAlertSettings
       tags:
         - AlertSettings
+      parameters:
+        - name: deviceId
+          in: query
+          description: list alert settings by specific device
+          schema:
+            type: string
+            format: uuid
+        - name: sensor
+          in: query
+          description: list alert settings by specific sensor
+          schema:
+            type: string
       responses:
         '200':
           description: Alert settings list response
@@ -1087,7 +1099,7 @@ components:
           format: int32
         message:
           type: string
-    
+
     Log:
       type: object
       required:
