@@ -1076,7 +1076,6 @@ components:
         deviceId:
           type: string
           format: uuid
-          readOnly: true
         sensor:
           type: string
         limits:
