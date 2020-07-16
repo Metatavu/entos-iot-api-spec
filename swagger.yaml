@@ -55,13 +55,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-
   /system/ping:
     get:
       summary: System ping endpoint
       operationId: ping
       tags:
-        - system
+        - System
       responses:
         '200':
           description: System ping response
@@ -69,6 +68,48 @@ paths:
             text/plain:
               schema:
                 description: Returns PING
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /calculateEffect:
+    get:
+      summary: Calculation effect
+      operationId: calculateEffect
+      tags:
+        - Calculate
+      parameters:
+        - name: mac
+          in: query
+          required: true
+          description: Mac address
+          schema:
+            type: string
+        - name: type
+          in: query
+          required: true
+          description: Measurement type
+          schema:
+            type: string
+        - name: value
+          in: query
+          required: true
+          description: Measurement value
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Calculation effect
+          content:
+            application/json:
+              schema:
+                description: list of measurements
+                type: number
+                format: double
+
         default:
           description: unexpected error
           content:
@@ -1018,6 +1059,9 @@ components:
           $ref: '#/components/schemas/Reading'
         modifier:
           $ref: '#/components/schemas/Modifier'
+        effect:
+          type: number
+          format: double
         creatorId:
           type: string
           format: uuid
@@ -1113,4 +1157,3 @@ components:
           format: date-time
         userEmail:
           type: string
-        
