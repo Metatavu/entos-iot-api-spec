@@ -921,6 +921,9 @@ components:
           type: string
         coordinates:
           $ref: '#/components/schemas/Coordinates'
+        weatherTimestamp:
+          type: string
+          format: date-time
         creatorId:
           type: string
           format: uuid
