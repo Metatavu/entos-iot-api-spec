@@ -316,6 +316,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: mac
+          in: query
+          description: mac address
+          schema:
+            type: string
       responses:
         '200':
           description: Device list response
